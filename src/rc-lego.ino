@@ -26,6 +26,7 @@ Servo servo1;
 Servo servo2;
 
 float hatToServoRatio = (float)180 / 256; //hat is between 0 / 255, so we do simple rule of three
+bool printLogs = false;
 
 void setup() {
   Serial.begin(115200);
@@ -64,8 +65,19 @@ void btloop()
     updateMotorFromHat(RightHatY, motor4);
     updateMotorFromButtons(UP, DOWN, motor1);
     updateMotorFromButtons(LEFT, RIGHT, motor2);
-
-    // printButtonsAndHats();
+    
+    if (PS3.getButtonClick(CROSS))
+    {
+      printLogs = !printLogs;
+      if (printLogs)
+        Serial.println("logs enabled");
+      else
+        Serial.println("logs disabled");
+    }
+    if (printLogs)
+    {
+      printButtonsAndHats();
+    }
   }
 }
 
