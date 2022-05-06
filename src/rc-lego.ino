@@ -25,8 +25,7 @@ AF_DCMotor motor4(4,MOTOR34_64KHZ);
 Servo servo1;
 Servo servo2;
 
-//TODO: review unused vars.
-const int hatToServoRatio = 180 / 256; //hat is between 0 / 255, so we do simple rule of three
+float hatToServoRatio = (float)180 / 256; //hat is between 0 / 255, so we do simple rule of three
 
 void setup() {
   Serial.begin(115200);
@@ -58,15 +57,15 @@ void btloop()
 
   if (PS3.PS3Connected || PS3.PS3NavigationConnected)
   {
-    // updateServo(LeftHatX, servo1);
-    // updateServo(RightHatX, servo2);
+    updateServo(LeftHatX, servo1);
+    updateServo(RightHatX, servo2);
 
     updateMotorFromHat(LeftHatY, motor3);
     updateMotorFromHat(RightHatY, motor4);
     updateMotorFromButtons(UP, DOWN, motor1);
     updateMotorFromButtons(LEFT, RIGHT, motor2);
 
-    printButtonsAndHats();
+    // printButtonsAndHats();
   }
 }
 
@@ -84,6 +83,16 @@ void updateServo(AnalogHatEnum hat, Servo servo)
 {
   int angle = hatToServo(PS3.getAnalogHat(hat));
   servo.write(angle);
+}
+
+int hatToServo(uint8_t hatValue)
+{
+  int angle = hatValue * hatToServoRatio;
+  // Serial.print("hat value ");
+  // Serial.print(hatValue);
+  // Serial.print(" to servo is angle ");
+  // Serial.println(angle);
+  return angle;
 }
 
 void updateMotorFromHat(AnalogHatEnum hat, AF_DCMotor motor)
@@ -131,16 +140,6 @@ void hatToMotor(uint8_t hatValue, uint8_t *speed, uint8_t *direction)
     *direction = RELEASE;
 
   *speed = abs(converted);
-}
-
-int hatToServo(uint8_t hatValue)
-{
-  int angle = hatValue * hatToServoRatio;
-  Serial.print("hat value ");
-  Serial.print(hatValue);
-  Serial.print(" to servo is angle ");
-  Serial.println(angle);
-  return angle;
 }
 
 void printButtonsAndHats()
