@@ -143,7 +143,7 @@ void hatToMotor(uint8_t hatValue, uint8_t *speed, uint8_t *direction)
 
   if (!isHatCentered(hatValue))
   {
-    if (converted > 127)
+    if (converted > 0)
       *direction = FORWARD;
     else
       *direction = BACKWARD;
