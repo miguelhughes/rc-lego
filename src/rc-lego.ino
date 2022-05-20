@@ -25,8 +25,16 @@ AF_DCMotor motor4(4,MOTOR34_64KHZ);
 Servo servo1;
 Servo servo2;
 
-float hatToServoRatio = (float)180 / 256; //hat is between 0 / 255, so we do simple rule of three
+const float hatToServoRatio = (float)180 / 256; //hat is between 0 / 255, so we do simple rule of three
 bool printLogs = false;
+bool connected = false;
+
+const int maxBtSilenceTolerance = 100; //after this much time, motors will be stopped - no other action
+uint32_t lastPrint = 0;
+long lastBtMessageTime = 0;
+
+uint32_t resetTimer = 0;
+const int resetWait = 3000;
 
 void setup() {
   Serial.begin(115200);
@@ -38,6 +46,7 @@ void setup() {
     while (1); //halt
   }
   Serial.print(F("\r\nPS3 Bluetooth Library Started"));
+  Btd.setErrorCallback(onBTError);
 
   motor1.setSpeed(255);
   motor2.setSpeed(255);
@@ -50,14 +59,29 @@ void setup() {
 void loop()
 {
 	btloop();
+  if (millis() / 100 > lastPrint)
+  {
+    Serial.print("BT last msg: ");
+    Serial.print(PS3.getLastMessageTime());
+    Serial.println();
+    lastPrint = millis()/100;
+  }
+
+  checkForReset();
 }
 
 void btloop()
 {
   Usb.Task();
 
-  if (PS3.PS3Connected || PS3.PS3NavigationConnected)
+  if (PS3.PS3Connected)
   {
+    if (!connected)
+    {
+      connectionDetected();
+      connected = true;
+    }
+
     updateServo(LeftHatX, servo1);
     updateServo(RightHatX, servo2);
 
@@ -78,7 +102,96 @@ void btloop()
     {
       printButtonsAndHats();
     }
+    idleBtCheck();
   }
+  else
+  {
+    if (connected)
+    {
+      disconnectionDetected();
+      
+      connected = false;
+    }
+    // stopAllMotors();
+  }
+  // Serial.print("Loop - ");
+  // Serial.print(connected);
+  // Serial.print(" - ");
+  // Serial.print(PS3.PS3Connected);
+  // // Serial.print(" - ");
+  // // Serial.print(PS3.ACLData);
+  // Serial.println();
+}
+
+void idleBtCheck()
+{
+  long lastMsg = PS3.getLastMessageTime();
+  if (lastMsg - lastBtMessageTime > maxBtSilenceTolerance)
+  {
+    Serial.println("Idle BT detected");
+    stopAllMotors();
+  }
+  lastBtMessageTime = lastMsg;
+}
+
+void connectionDetected()
+{
+  Serial.println("connection Detected");
+  setResetTimer();
+}
+
+void disconnectionDetected()
+{
+  Serial.println("disconnection Detected");
+}
+
+void onBTError(String type, uint8_t code)
+{
+  stopAllMotors(); //stop all motors so that if it's a car it stops on the spot instead of crashing into something
+  if (type != "ACL" || code != 0xF0) //acl and 0xF0 sometimes happens and it continues to work
+  {
+    Serial.println();
+    Serial.println("forcing disconnect");
+    // Btd.disconnect();
+    setResetTimer();
+    PS3.disconnect();
+  }
+  //if we keep this, move to a function and re-use from setup()
+  // if (Usb.Init() == -1)
+  // {
+  //   Serial.print(F("\r\nOSC did not start"));
+  //   while (1)
+  //     ; //halt
+  // }
+  // Serial.print(F("\r\nPS3 Bluetooth Library Started"));
+}
+
+void (*reset)(void) = 0; //standard reset function - causes arduino to crash
+
+void setResetTimer()
+{
+  resetTimer = millis() + resetWait;
+  Serial.print("will reset at ");
+  Serial.println(resetTimer);
+}
+
+void checkForReset()
+{
+  if (resetTimer != 0)
+  {
+    if (millis() > resetTimer)
+    {
+      reset();
+    }
+  }
+}
+
+void stopAllMotors()
+{
+  motor1.run(RELEASE);
+  motor2.run(RELEASE);
+  motor3.run(RELEASE);
+  motor4.run(RELEASE);
 }
 
 bool isHatCentered(AnalogHatEnum hat)
@@ -117,6 +230,7 @@ void updateMotorFromHat(AnalogHatEnum hat, AF_DCMotor motor)
   motor.setSpeed(speed);
   motor.run(direction);
 }
+
 void updateMotorFromButtons(ButtonEnum firstButton, ButtonEnum secondButton, AF_DCMotor motor)
 {
   bool firstButtonPressed = PS3.getButtonPress(firstButton);
@@ -155,6 +269,10 @@ void hatToMotor(uint8_t hatValue, uint8_t *speed, uint8_t *direction)
 }
 
 void printButtonsAndHats()
+{
+
+}
+void printButtonsAndHats_bak()
 {
   if (PS3.getAnalogHat(LeftHatX) > 137 || PS3.getAnalogHat(LeftHatX) < 117 || PS3.getAnalogHat(LeftHatY) > 137 || PS3.getAnalogHat(LeftHatY) < 117 || PS3.getAnalogHat(RightHatX) > 137 || PS3.getAnalogHat(RightHatX) < 117 || PS3.getAnalogHat(RightHatY) > 137 || PS3.getAnalogHat(RightHatY) < 117)
   {
