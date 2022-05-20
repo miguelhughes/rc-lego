@@ -10,7 +10,7 @@
 //#include <AFMotor.h>
 #include <AFMotor_routed.h>
 #include <Servo.h> 
-
+//#define EXTRAINFO
 USB Usb;
 BTD Btd(&Usb);
 //refer to ps3bt example on instructions on how to set this.
@@ -59,6 +59,7 @@ void setup() {
 void loop()
 {
 	btloop();
+#ifdef EXTRAINFO
   if (millis() / 100 > lastPrint)
   {
     Serial.print("BT last msg: ");
@@ -66,6 +67,7 @@ void loop()
     Serial.println();
     lastPrint = millis()/100;
   }
+  #endif
 }
 
 void btloop()
@@ -237,10 +239,6 @@ void hatToMotor(uint8_t hatValue, uint8_t *speed, uint8_t *direction)
 }
 
 void printButtonsAndHats()
-{
-
-}
-void printButtonsAndHats_bak()
 {
   if (PS3.getAnalogHat(LeftHatX) > 137 || PS3.getAnalogHat(LeftHatX) < 117 || PS3.getAnalogHat(LeftHatY) > 137 || PS3.getAnalogHat(LeftHatY) < 117 || PS3.getAnalogHat(RightHatX) > 137 || PS3.getAnalogHat(RightHatX) < 117 || PS3.getAnalogHat(RightHatY) > 137 || PS3.getAnalogHat(RightHatY) < 117)
   {
