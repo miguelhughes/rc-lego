@@ -66,8 +66,6 @@ void loop()
     Serial.println();
     lastPrint = millis()/100;
   }
-
-  // checkForReset();
 }
 
 void btloop()
@@ -112,7 +110,7 @@ void btloop()
       
       connected = false;
     }
-    // stopAllMotors();
+    stopAllMotors(); //just in case, sometimes after a disconnect or failed connection a motor start is fired and they continue running
   }
   // Serial.print("Loop - ");
   // Serial.print(connected);
@@ -137,7 +135,6 @@ void idleBtCheck()
 void connectionDetected()
 {
   Serial.println("connection Detected");
-  setResetTimer();
 }
 
 void disconnectionDetected()
@@ -158,6 +155,7 @@ void onBTError(String type, uint8_t code)
     // PS3.disconnect();
     // setResetTimer();
     Serial.println("forcing reset");
+    Serial.flush(); //othw messages are truncated. This seems to help with BT reconnection after reset as well.
     resetDevice();
   }
   //if we keep this, move to a function and re-use from setup()
@@ -168,24 +166,6 @@ void onBTError(String type, uint8_t code)
   //     ; //halt
   // }
   // Serial.print(F("\r\nPS3 Bluetooth Library Started"));
-}
-
-void setResetTimer()
-{
-  resetTimer = millis() + resetWait;
-  Serial.print("will reset at ");
-  Serial.println(resetTimer);
-}
-
-void checkForReset()
-{
-  if (resetTimer != 0)
-  {
-    if (millis() > resetTimer)
-    {
-      resetDevice();
-    }
-  }
 }
 
 void stopAllMotors()
