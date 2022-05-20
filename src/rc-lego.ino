@@ -67,7 +67,7 @@ void loop()
     lastPrint = millis()/100;
   }
 
-  checkForReset();
+  // checkForReset();
 }
 
 void btloop()
@@ -145,16 +145,20 @@ void disconnectionDetected()
   Serial.println("disconnection Detected");
 }
 
+void (*resetDevice)(void) = 0; //standard reset function - causes arduino to crash
+
 void onBTError(String type, uint8_t code)
 {
   stopAllMotors(); //stop all motors so that if it's a car it stops on the spot instead of crashing into something
   if (type != "ACL" || code != 0xF0) //acl and 0xF0 sometimes happens and it continues to work
   {
     Serial.println();
-    Serial.println("forcing disconnect");
-    // Btd.disconnect();
-    setResetTimer();
-    PS3.disconnect();
+    // Serial.println("forcing disconnect");
+    // // Btd.disconnect();
+    // PS3.disconnect();
+    // setResetTimer();
+    Serial.println("forcing reset");
+    resetDevice();
   }
   //if we keep this, move to a function and re-use from setup()
   // if (Usb.Init() == -1)
@@ -165,8 +169,6 @@ void onBTError(String type, uint8_t code)
   // }
   // Serial.print(F("\r\nPS3 Bluetooth Library Started"));
 }
-
-void (*reset)(void) = 0; //standard reset function - causes arduino to crash
 
 void setResetTimer()
 {
@@ -181,7 +183,7 @@ void checkForReset()
   {
     if (millis() > resetTimer)
     {
-      reset();
+      resetDevice();
     }
   }
 }
