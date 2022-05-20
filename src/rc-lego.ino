@@ -112,13 +112,6 @@ void btloop()
     }
     stopAllMotors(); //just in case, sometimes after a disconnect or failed connection a motor start is fired and they continue running
   }
-  // Serial.print("Loop - ");
-  // Serial.print(connected);
-  // Serial.print(" - ");
-  // Serial.print(PS3.PS3Connected);
-  // // Serial.print(" - ");
-  // // Serial.print(PS3.ACLData);
-  // Serial.println();
 }
 
 void idleBtCheck()
@@ -150,6 +143,7 @@ void onBTError(String type, uint8_t code)
   if (type != "ACL" || code != 0xF0) //acl and 0xF0 sometimes happens and it continues to work
   {
     Serial.println();
+    //These weren't reliable enough, on some of the errors it freezes and it won't recover. our loop isn't called in those cases (see BT&usb errors & application behavior)
     // Serial.println("forcing disconnect");
     // // Btd.disconnect();
     // PS3.disconnect();
@@ -158,14 +152,6 @@ void onBTError(String type, uint8_t code)
     Serial.flush(); //othw messages are truncated. This seems to help with BT reconnection after reset as well.
     resetDevice();
   }
-  //if we keep this, move to a function and re-use from setup()
-  // if (Usb.Init() == -1)
-  // {
-  //   Serial.print(F("\r\nOSC did not start"));
-  //   while (1)
-  //     ; //halt
-  // }
-  // Serial.print(F("\r\nPS3 Bluetooth Library Started"));
 }
 
 void stopAllMotors()
