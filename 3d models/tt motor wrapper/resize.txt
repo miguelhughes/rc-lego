@@ -1,0 +1,4 @@
+inner original size 22.3mm
+v2:
+expected new size (+0.4mm more) => 22.7
+by simple rule of 3, outer size from 26.5 to 27

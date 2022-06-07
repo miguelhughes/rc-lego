@@ -1,0 +1,29 @@
+{
+    "parameterSets": {
+        "servo 9g v1": {
+            "axle_length": "7",
+            "coupler_outside_diameter": "8.2",
+            "motor_axle_cutout_diameter": "4.7",
+            "motor_axle_diameter": "4.7",
+            "motor_axle_length": "4",
+            "try_bigger_sizes": "no"
+        },
+        "tt motor - large ones": {
+            "axle_length": "7",
+            "coupler_outside_diameter": "8",
+            "motor_axle_cutout_diameter": "3.9",
+            "motor_axle_diameter": "5.6",
+            "motor_axle_length": "7",
+            "try_bigger_sizes": "no"
+        },
+        "tt motor - small ones": {
+            "axle_length": "7",
+            "coupler_outside_diameter": "8",
+            "motor_axle_cutout_diameter": "3.8",
+            "motor_axle_diameter": "5.6",
+            "motor_axle_length": "7",
+            "try_bigger_sizes": "no"
+        }
+    },
+    "fileFormatVersion": "1"
+}
