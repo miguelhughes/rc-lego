@@ -6,12 +6,12 @@ Here you'll find code, 3d models & parts list for getting started with you own v
 The motors & servos are controlled with PS3 controller, and can be also easily modified to work with a PS4 (Although I haven't tried yet)
 
 # Videos & Photos:
-[Here's a version of a tank mode car](https://photos.app.goo.gl/T52SBdVWEAR2ZMmX7), that drives very much like a bob cat. Very easy to build and fun to drive.
+[Here's a version of a tank mode car](https://youtu.be/UGNO0eF9Yjw), that drives very much like a bob cat. Very easy to build and fun to drive.
 
-With some lego technic, I was also able to build a [car with steering](https://photos.app.goo.gl/HNYthSUUsLjo47GH8). Not the prettiest, but still fun!
+With some lego technic, I was also able to build a [car with steering](https://youtu.be/Ge-JHIiQ8DI). Not the prettiest, but still fun!
 
 complete photo & video collection:
-https://photos.app.goo.gl/P4w6zJVzxgqLykxx82
+https://photos.app.goo.gl/P4w6zJVzxgqLykxx8
 
 # Parts list:
 ## Required: 
@@ -27,12 +27,13 @@ https://photos.app.goo.gl/P4w6zJVzxgqLykxx82
 - 18650 battery holder *
 - Up to 4 TT Gearbox Dc motors https://www.adafruit.com/product/3777
 
+*I tried using 4x 1.2v rechargable AA batteries, and I didn't like the result. On their own they could move a couple of the motors, but through the arduino shield they would barely move. I didn't try a 9v battery, I've seen a couple of projects using that so it might work. If you do try that route, let me know! The motor shield would handle the different voltages without issues.
+
 ## Optional
 - 2 SG90 micro servos
 
-*I tried using 4x 1.2v rechargable AA batteries, and I didn't like the result. On their own they could move a couple of the motors, but through the arduino shield they would barely move. I didn't try a 9v battery, I've seen a couple of projects using that so it might work. If you do try that route, let me know! The motor shield would handle the different voltages without issues.
-
 ## 3d parts
+
 see 3d models/readme.md
 
 # Control
