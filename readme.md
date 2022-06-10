@@ -5,6 +5,11 @@ Here you'll find code, 3d models & parts list for getting started with you own v
 
 The motors & servos are controlled with PS3 controller, and can be also easily modified to work with a PS4 (Although I haven't tried yet)
 
+# Why?
+
+My kid was always bugging me to get him a Remote Controlled car for his birthday. As much as I understood his feeling, I didn't want to get him something that would end up in a landfill in 1-2 years, and would add nothing to his development and creativity. So I decided to make him a power Lego kit with arduino and 3d printed parts, so that he can build his own RC car and other stuff as well!
+This kit is easily fixed and upgraded, and can be an entryway to programming and electronics for your kids as well
+
 # Videos & Photos:
 [Here's a version of a tank mode car](https://youtu.be/UGNO0eF9Yjw), that drives very much like a bob cat. Very easy to build and fun to drive.
 
